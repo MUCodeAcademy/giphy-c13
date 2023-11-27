@@ -14,7 +14,6 @@ export default function useAPI(searchTerm) {
                setError(null);
                setLoading(true);
                const response = await fetch(baseURL + searchTerm);
-               console.log(baseURL + searchTerm);
                if (response.ok) {
                 const json = await response.json();
                 setData(json);
