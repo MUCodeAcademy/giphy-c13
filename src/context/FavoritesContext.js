@@ -5,7 +5,7 @@ const FavoritesContext = createContext(null);
 
 export const useFavoritesContext = () => useContext(FavoritesContext);
 
-export function FavoritesProvider (props) {
+export function FavoritesProvider(props) {
     const [favorites, dispatch] = useReducer(favoritesReducer, []);
 
     function addFavorite(gif) {
