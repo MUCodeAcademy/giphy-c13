@@ -34,7 +34,7 @@ const SearchPage = () => {
             {Array.isArray(gifs) ? gifs.map((gif) => (
                 <div>
                     <button onClick={() => addFavorite(gif.images.original.url)}>Add Favorite</button>
-                    <img src={gif.images.original.url} />
+                    <img src={gif.images.original.url} data-testid="gif" />
                 </div>
             )) : <p></p>}
             </div>

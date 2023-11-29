@@ -1,9 +1,9 @@
 import { render, fireEvent } from '@testing-library/react';
-import LoginPage from '../pages/LoginPage';
-import { useUserContext } from '../context/UserContext';
+import LoginPage from '../../pages/LoginPage';
+import { useUserContext } from '../../context/UserContext';
 
 // Specifies that we want to mock the UserContext
-jest.mock('../context/UserContext', () => ({
+jest.mock('../../context/UserContext', () => ({
     // Creates a mock function for useUserContext so that we can use it in our test
     useUserContext: jest.fn(),
 }));

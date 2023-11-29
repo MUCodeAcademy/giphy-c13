@@ -1,4 +1,4 @@
-import TestPage from "../pages/TestPage";
+import TestPage from "../../pages/TestPage";
 import { render, fireEvent } from "@testing-library/react";
 
 describe("TestPage", () => {
