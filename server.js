@@ -40,13 +40,16 @@ app.post("/register", async (req, res) => {
             "INSERT INTO users VALUES (?, ?, ?)",
             [1, req.body.username, hashedPassword],
             function (err, rows, fields) {
-                if (err) throw err;
+                if (err) {
+                    console.log(err);
+                }
                 console.log("Rows: ", rows);
                 console.log("Fields: ", fields);
+                res.send("It worked");
             }
         )
-        res.send("It worked");
     } catch (err) {
+        console.log(err);
         res.send(err);
     }
 });
