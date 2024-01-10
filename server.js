@@ -43,8 +43,6 @@ app.post("/register", async (req, res) => {
                 if (err) {
                     console.log(err);
                 }
-                console.log("Rows: ", rows);
-                console.log("Fields: ", fields);
                 res.send("It worked");
             }
         )
