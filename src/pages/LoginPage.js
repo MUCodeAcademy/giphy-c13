@@ -6,8 +6,21 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const { setUser } = useUserContext();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         setUser(inputUsername);
+        const data = {
+            username: inputUsername,
+            password: password
+        }
+        console.log(data);
+        const response = await fetch("http://localhost:3006/login", {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        console.log(response);
     };
 
     const handleRegister = async () => {
