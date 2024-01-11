@@ -3,6 +3,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+// Imports uuid as version 4 which allows us to generate a unique user id
+const { v4: uuidv4 } = require('uuid');
 
 // Creates our connection with the database info
 const connection = mysql.createConnection({
@@ -34,11 +36,13 @@ app.get("/users/:userId", (req, res) => {
 });
 
 app.post("/register", async (req, res) => {
+    // Generates a random user id for each person who is trying to register
+    const id = uuidv4();
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         connection.query(
             "INSERT INTO users VALUES (?, ?, ?)",
-            [1, req.body.username, hashedPassword],
+            [id, req.body.username, hashedPassword],
             function (err, rows, fields) {
                 if (err) {
                     console.log(err);
@@ -49,6 +53,31 @@ app.post("/register", async (req, res) => {
     } catch (err) {
         console.log(err);
         res.send(err);
+    }
+});
+
+app.get("/login", (req, res) => {
+    try {
+        connection.query(
+            "SELECT username FROM users WHERE username = ?",
+            [req.body.username],
+            (err, rows, fields) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send(err);
+                }
+                // If there is nothing in the rows, that means it didn't find the username.
+                // If there is something in the rows, that means it found the username.
+                if (rows.length !== 0) {
+                    return res.status(200).send("It worked.");
+                } else {
+                    return res.status(500).send("Username not found.");
+                }
+            }
+        )
+    } catch (err) {
+        console.log(err);
+        return res.send(err);
     }
 });
 
