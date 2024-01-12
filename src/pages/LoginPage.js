@@ -6,39 +6,34 @@ const LoginPage = () => {
     const [password, setPassword] = useState("");
     const { setUser } = useUserContext();
 
-    const handleLogin = async () => {
-        setUser(inputUsername);
+    const handleLogin = async (e) => {
+        // e.target.value will either be 'login' or 'register' depending on button they clicked,
+        // so it just appends that to the end of our base url.
+        const url = "http://localhost:3006/" + e.target.value;
         const data = {
             username: inputUsername,
             password: password
         }
         console.log(data);
-        const response = await fetch("http://localhost:3006/login", {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        console.log(response);
-    };
-
-    const handleRegister = async () => {
-        setUser(inputUsername);
-        const data = {
-            username: inputUsername,
-            password: password
-        }
-        console.log(data);
-        const response = await fetch("http://localhost:3006/register", {
+        fetch(url, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
-        });
-        console.log(response);
-    }
+        })
+        .then(response => response.text())
+        .then(response => {
+            if (response === "Login successful." || response === "It worked") {
+                setUser(inputUsername);
+            } else {
+                alert(response);
+            }
+        })
+        .catch(err => {
+            console.log("Error: ", err);
+        })
+    };
 
     return (
         <div>
@@ -53,8 +48,8 @@ const LoginPage = () => {
                 type='password'
                 placeholder='Password'
             />
-            <button onClick={handleLogin}>Login</button>
-            <button onClick={handleRegister}>Register</button>
+            <button value='login' onClick={(e) => handleLogin(e)}>Login</button>
+            <button value='register' onClick={(e) => handleLogin(e)}>Register</button>
         </div>
     );
 };

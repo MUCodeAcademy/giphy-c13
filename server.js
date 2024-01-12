@@ -56,22 +56,29 @@ app.post("/register", async (req, res) => {
     }
 });
 
-app.get("/login", (req, res) => {
+app.post("/login", (req, res) => {
     try {
         connection.query(
-            "SELECT username FROM users WHERE username = ?",
+            "SELECT username, password FROM users WHERE username = ?",
             [req.body.username],
-            (err, rows, fields) => {
+            async (err, rows, fields) => {
                 if (err) {
                     console.log(err);
                     return res.status(500).send(err);
                 }
                 // If there is nothing in the rows, that means it didn't find the username.
                 // If there is something in the rows, that means it found the username.
-                if (rows.length !== 0) {
-                    return res.status(200).send("It worked.");
-                } else {
+                if (rows.length === 0) {
                     return res.status(500).send("Username not found.");
+                }
+                // Get the user information from the query
+                const user = rows[0];
+                // Compare their password to the one in the database
+                const match = await bcrypt.compare(req.body.password, user.password);
+                if (match) {
+                    return res.status(200).send("Login successful.");
+                } else {
+                    return res.status(500).send("Username or password is incorrect.")
                 }
             }
         )
